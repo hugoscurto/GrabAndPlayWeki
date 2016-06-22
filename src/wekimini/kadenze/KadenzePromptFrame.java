@@ -24,55 +24,65 @@ public class KadenzePromptFrame extends javax.swing.JFrame {
 
     private final String[] comboOptions
             = {"No, just exploring or playing",
-                "No, but I'd like to log data",
-                "Assignment 1, Part 1",
-                "Assignment 2, Part 1A",
-                "Assignment 2, Part 1B",
-                "Assignment 2, Part 1C",
-                "Assignment 2, Part 1D",
-                "Assignment 2, Part 2",
-                "Assignment 2, Part 3A",
-                "Assignment 2, Part 3B",
-                "Assignment 5, Part 1A",
-                "Assignment 5, Part 1B",
-                "Assignment 5, Part 1C",
-                "Assignment 5, Part 2",
-                "Assignment 5, Part 3A",
-                "Assignment 5, Part 3B",
-                "Assignment 7, Part 1A",
-                "Assignment 7, Part 1B",
-                "Assignment 7, Part 1C",
-                "Assignment 7, Part 2",
-                "Assignment 11, Part 1",
-                "Assignment 11, Part 2",
-                "Assignment 12"
+                "No, but I'd like to log data"
             };
+    
+//    private final String[] comboOptions
+//            = {"No, just exploring or playing",
+//                "No, but I'd like to log data",
+//                "Assignment 1, Part 1",
+//                "Assignment 2, Part 1A",
+//                "Assignment 2, Part 1B",
+//                "Assignment 2, Part 1C",
+//                "Assignment 2, Part 1D",
+//                "Assignment 2, Part 2",
+//                "Assignment 2, Part 3A",
+//                "Assignment 2, Part 3B",
+//                "Assignment 5, Part 1A",
+//                "Assignment 5, Part 1B",
+//                "Assignment 5, Part 1C",
+//                "Assignment 5, Part 2",
+//                "Assignment 5, Part 3A",
+//                "Assignment 5, Part 3B",
+//                "Assignment 7, Part 1A",
+//                "Assignment 7, Part 1B",
+//                "Assignment 7, Part 1C",
+//                "Assignment 7, Part 2",
+//                "Assignment 11, Part 1",
+//                "Assignment 11, Part 2",
+//                "Assignment 12"
+//            };
 
     private final KadenzeAssignmentType[] assignmentTypes
             = {KadenzeAssignmentType.NONE,
-                KadenzeAssignmentType.LOGGING_MODE,
-                KadenzeAssignmentType.ASSIGNMENT1,
-                KadenzeAssignmentType.ASSIGNMENT2_PART1A,
-                KadenzeAssignmentType.ASSIGNMENT2_PART1B,
-                KadenzeAssignmentType.ASSIGNMENT2_PART1C,
-                KadenzeAssignmentType.ASSIGNMENT2_PART1D,
-                KadenzeAssignmentType.ASSIGNMENT2_PART2,
-                KadenzeAssignmentType.ASSIGNMENT2_PART3A,
-                KadenzeAssignmentType.ASSIGNMENT2_PART3B,
-                KadenzeAssignmentType.ASSIGNMENT5_PART1A,
-                KadenzeAssignmentType.ASSIGNMENT5_PART1B,
-                KadenzeAssignmentType.ASSIGNMENT5_PART1C,
-                KadenzeAssignmentType.ASSIGNMENT5_PART2,
-                KadenzeAssignmentType.ASSIGNMENT5_PART3A,
-                KadenzeAssignmentType.ASSIGNMENT5_PART3B,
-                KadenzeAssignmentType.ASSIGNMENT7_PART1A,
-                KadenzeAssignmentType.ASSIGNMENT7_PART1B,
-                KadenzeAssignmentType.ASSIGNMENT7_PART1C,
-                KadenzeAssignmentType.ASSIGNMENT7_PART2,
-                KadenzeAssignmentType.ASSIGNMENT11_PART1,
-                KadenzeAssignmentType.ASSIGNMENT11_PART2,
-                KadenzeAssignmentType.ASSIGNMENT12
+                KadenzeAssignmentType.LOGGING_MODE
             };
+    
+//    private final KadenzeAssignmentType[] assignmentTypes
+//            = {KadenzeAssignmentType.NONE,
+//                KadenzeAssignmentType.LOGGING_MODE,
+//                KadenzeAssignmentType.ASSIGNMENT1,
+//                KadenzeAssignmentType.ASSIGNMENT2_PART1A,
+//                KadenzeAssignmentType.ASSIGNMENT2_PART1B,
+//                KadenzeAssignmentType.ASSIGNMENT2_PART1C,
+//                KadenzeAssignmentType.ASSIGNMENT2_PART1D,
+//                KadenzeAssignmentType.ASSIGNMENT2_PART2,
+//                KadenzeAssignmentType.ASSIGNMENT2_PART3A,
+//                KadenzeAssignmentType.ASSIGNMENT2_PART3B,
+//                KadenzeAssignmentType.ASSIGNMENT5_PART1A,
+//                KadenzeAssignmentType.ASSIGNMENT5_PART1B,
+//                KadenzeAssignmentType.ASSIGNMENT5_PART1C,
+//                KadenzeAssignmentType.ASSIGNMENT5_PART2,
+//                KadenzeAssignmentType.ASSIGNMENT5_PART3A,
+//                KadenzeAssignmentType.ASSIGNMENT5_PART3B,
+//                KadenzeAssignmentType.ASSIGNMENT7_PART1A,
+//                KadenzeAssignmentType.ASSIGNMENT7_PART1B,
+//                KadenzeAssignmentType.ASSIGNMENT7_PART1C,
+//                KadenzeAssignmentType.ASSIGNMENT7_PART2,
+//                KadenzeAssignmentType.ASSIGNMENT11_PART1,
+//                KadenzeAssignmentType.ASSIGNMENT11_PART2,
+//                KadenzeAssignmentType.ASSIGNMENT12
+//            };
 
     /**
      * Creates new form KadenzePromptFrame
@@ -92,6 +102,7 @@ public class KadenzePromptFrame extends javax.swing.JFrame {
 
     private void populateComboBox() {
         comboAssignment.setModel(new DefaultComboBoxModel(comboOptions));
+        comboAssignment.setSelectedIndex(1);
     }
 
     /**
@@ -121,7 +132,8 @@ public class KadenzePromptFrame extends javax.swing.JFrame {
 
         jLabel1.setText("Are you working on a Kadenze assignment?");
 
-        comboAssignment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No, just exploring or playing", "Yes: Assignment 1", "Yes: Assignment 2, Part 1", "Yes: Assignment 2, Part 2" }));
+        comboAssignment.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No", "No but log" }));
+        comboAssignment.setSelectedIndex(1);
         comboAssignment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboAssignmentActionPerformed(evt);
@@ -285,6 +297,7 @@ public class KadenzePromptFrame extends javax.swing.JFrame {
         } catch (IOException ex) {
             s.setKadenzeSaveLocation(f.getAbsolutePath());
         }
+        
         if (comboAssignment.getSelectedIndex() != 0) {
             KadenzeAssignmentType type = assignmentTypes[comboAssignment.getSelectedIndex()];
             try {

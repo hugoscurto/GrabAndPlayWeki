@@ -110,13 +110,12 @@
         <Component class="javax.swing.JComboBox" name="comboAssignment">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="No, just exploring or playing"/>
-                <StringItem index="1" value="Yes: Assignment 1"/>
-                <StringItem index="2" value="Yes: Assignment 2, Part 1"/>
-                <StringItem index="3" value="Yes: Assignment 2, Part 2"/>
+              <StringArray count="2">
+                <StringItem index="0" value="No"/>
+                <StringItem index="1" value="No but log"/>
               </StringArray>
             </Property>
+            <Property name="selectedIndex" type="int" value="1"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboAssignmentActionPerformed"/>

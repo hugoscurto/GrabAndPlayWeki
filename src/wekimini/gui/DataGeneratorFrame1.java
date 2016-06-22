@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import weka.core.Instances;
 import wekimini.DataGenerator;
 import wekimini.InputGenerator;
 import wekimini.OutputGenerator;
@@ -63,8 +64,8 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
     }
     
     private void initialize() {
-        buttonAdd.setEnabled(false);
-        buttonRecordOutputs.setEnabled(false);
+        //buttonAdd.setEnabled(false);
+        //buttonRecordOutputs.setEnabled(false);
         
         buttonDeleteInputs.setEnabled(false);
         buttonDeleteOutputs.setEnabled(false);
@@ -82,11 +83,17 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         comboClustering.setEnabled(false);
         
         fieldNumInstances.setEnabled(true);
+        fieldNumClusterInstances.setEnabled(false);
         
-        buttonDeleteTrainingInstances.setEnabled(false);
-        buttonTrain.setEnabled(false);
-        buttonSaveData.setEnabled(false);
+        buttonEditPresets.setEnabled(false);
+        
+        //buttonDeleteTrainingInstances.setEnabled(false);
+        //buttonTrain.setEnabled(false);
         buttonRun.setEnabled(false);
+        
+        //panelOutputSpecification.setVisible(false);
+        
+        labelStatus.setText("Click on \"Start Recording\" to record inputs.");
         
         g.setInputMode(InputGenerator.InputMode.RANDOM);
         g.setOutputMode(OutputGenerator.OutputMode.RANDOM);
@@ -126,7 +133,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         } else {
             buttonRecordInputs.setText("Start Recording");
             buttonRecordInputs.setForeground(Color.black);
-            labelStatus.setText("Recording done.");
+            labelStatus.setText("Recording done. You can now generate training data, and/or choose generation parameters.");
         }
     }
     private void updateRecordOutputsButton() {
@@ -259,7 +266,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
     }
     
     private void updateNumOutputExamples() {
-        labelNumOutputExamples.setText(Integer.toString(g.getNumOutputInstances()));
+        labelNumOutputPresets.setText(Integer.toString(g.getNumOutputInstances()));
     }
     
     private void updateLabelSliderValue(int num) {
@@ -292,75 +299,52 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
 
         buttonGroupOutputMode = new javax.swing.ButtonGroup();
         buttonGroupInputMode = new javax.swing.ButtonGroup();
+        frameOptions = new javax.swing.JFrame();
+        jPanel3 = new javax.swing.JPanel();
+        comboClustering = new javax.swing.JComboBox<>();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        fieldNumInstances = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menuOptions = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        frameEditPresets = new javax.swing.JFrame();
+        panelOutputSpecification = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        labelNumOutputPresets = new javax.swing.JLabel();
+        buttonRecordOutputs = new javax.swing.JButton();
+        buttonDeleteOutputs = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         buttonRecordInputs = new javax.swing.JButton();
         buttonDeleteInputs = new javax.swing.JButton();
-        radioButtonInputsRandom = new javax.swing.JRadioButton();
-        radioButtonInputsCluster = new javax.swing.JRadioButton();
-        labelNumInputExamples = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        comboClustering = new javax.swing.JComboBox<>();
-        jPanel3 = new javax.swing.JPanel();
-        radioButtonOutputsRandom = new javax.swing.JRadioButton();
-        buttonRecordOutputs = new javax.swing.JButton();
-        labelNumOutputExamples = new javax.swing.JLabel();
-        buttonDeleteOutputs = new javax.swing.JButton();
-        radioButtonOutputsPresets = new javax.swing.JRadioButton();
-        jLabel3 = new javax.swing.JLabel();
+        labelNumInputExamples = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         buttonAdd = new javax.swing.JButton();
-        fieldNumInstances = new javax.swing.JTextField();
-        buttonTrain = new javax.swing.JButton();
         buttonRun = new javax.swing.JButton();
-        buttonDeleteTrainingInstances = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        buttonSaveData = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        buttonLoadPreviousModel = new javax.swing.JButton();
+        buttonLoadNextModel = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        labelStatus = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        labelStatus = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        radioButtonInputsRandom = new javax.swing.JRadioButton();
+        radioButtonInputsCluster = new javax.swing.JRadioButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        fieldNumRandomInstances = new javax.swing.JTextField();
+        fieldNumClusterInstances = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        radioButtonOutputsRandom = new javax.swing.JRadioButton();
+        radioButtonOutputsPresets = new javax.swing.JRadioButton();
+        buttonEditPresets = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Data Generator");
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Inputs"));
-
-        buttonRecordInputs.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        buttonRecordInputs.setText("Start recording");
-        buttonRecordInputs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRecordInputsActionPerformed(evt);
-            }
-        });
-
-        buttonDeleteInputs.setText("Delete");
-        buttonDeleteInputs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonDeleteInputsActionPerformed(evt);
-            }
-        });
-
-        buttonGroupInputMode.add(radioButtonInputsRandom);
-        radioButtonInputsRandom.setSelected(true);
-        radioButtonInputsRandom.setText("Select random instances");
-        radioButtonInputsRandom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioButtonInputsRandomActionPerformed(evt);
-            }
-        });
-
-        buttonGroupInputMode.add(radioButtonInputsCluster);
-        radioButtonInputsCluster.setText("Cluster");
-        radioButtonInputsCluster.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioButtonInputsClusterActionPerformed(evt);
-            }
-        });
-
-        labelNumInputExamples.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        labelNumInputExamples.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelNumInputExamples.setText("0");
-
-        jLabel2.setText("# recorded examples:");
+        frameOptions.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        frameOptions.setTitle("Options");
+        frameOptions.setSize(new java.awt.Dimension(570, 194));
 
         comboClustering.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "K-means", "EM algorithm" }));
         comboClustering.addItemListener(new java.awt.event.ItemListener() {
@@ -374,136 +358,26 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(radioButtonInputsRandom)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelNumInputExamples, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(buttonDeleteInputs, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(radioButtonInputsCluster)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(comboClustering, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(buttonRecordInputs, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(radioButtonInputsRandom)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioButtonInputsCluster)
-                    .addComponent(comboClustering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
-                .addComponent(buttonRecordInputs, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonDeleteInputs)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelNumInputExamples)
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Outputs"));
-
-        buttonGroupOutputMode.add(radioButtonOutputsRandom);
-        radioButtonOutputsRandom.setSelected(true);
-        radioButtonOutputsRandom.setText("Generate random instances");
-        radioButtonOutputsRandom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioButtonOutputsRandomActionPerformed(evt);
-            }
-        });
-
-        buttonRecordOutputs.setText("Add");
-        buttonRecordOutputs.setToolTipText("");
-        buttonRecordOutputs.setPreferredSize(new java.awt.Dimension(107, 28));
-        buttonRecordOutputs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRecordOutputsActionPerformed(evt);
-            }
-        });
-
-        labelNumOutputExamples.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        labelNumOutputExamples.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelNumOutputExamples.setText("0");
-        labelNumOutputExamples.setToolTipText("");
-
-        buttonDeleteOutputs.setText("Delete");
-        buttonDeleteOutputs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonDeleteOutputsActionPerformed(evt);
-            }
-        });
-
-        buttonGroupOutputMode.add(radioButtonOutputsPresets);
-        radioButtonOutputsPresets.setText("Select presets");
-        radioButtonOutputsPresets.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioButtonOutputsPresetsActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("# added examples:");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonDeleteOutputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonRecordOutputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(radioButtonOutputsPresets)
-                    .addComponent(radioButtonOutputsRandom)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(labelNumOutputExamples, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addComponent(comboClustering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(radioButtonOutputsRandom)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(radioButtonOutputsPresets)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(buttonRecordOutputs, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonDeleteOutputs)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(labelNumOutputExamples))
-                .addContainerGap())
+                .addComponent(comboClustering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Training data"));
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Dataset specification"));
 
-        buttonAdd.setText("Add Examples");
-        buttonAdd.setToolTipText("");
-        buttonAdd.setMaximumSize(new java.awt.Dimension(107, 28));
-        buttonAdd.setMinimumSize(new java.awt.Dimension(107, 28));
-        buttonAdd.setPreferredSize(new java.awt.Dimension(107, 28));
-        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddActionPerformed(evt);
-            }
-        });
+        jLabel4.setText("Number of examples to be generated:");
 
         fieldNumInstances.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         fieldNumInstances.setText("3");
@@ -518,10 +392,201 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             }
         });
 
-        buttonTrain.setText("Train");
-        buttonTrain.addActionListener(new java.awt.event.ActionListener() {
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(fieldNumInstances, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(fieldNumInstances)
+                .addComponent(jLabel4))
+        );
+
+        menuOptions.setText("Options");
+
+        jMenuItem1.setText("Display options...");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonTrainActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        menuOptions.add(jMenuItem1);
+
+        jMenuBar1.add(menuOptions);
+
+        frameOptions.setJMenuBar(jMenuBar1);
+
+        javax.swing.GroupLayout frameOptionsLayout = new javax.swing.GroupLayout(frameOptions.getContentPane());
+        frameOptions.getContentPane().setLayout(frameOptionsLayout);
+        frameOptionsLayout.setHorizontalGroup(
+            frameOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameOptionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(417, Short.MAX_VALUE))
+            .addGroup(frameOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(frameOptionsLayout.createSequentialGroup()
+                    .addGap(131, 131, 131)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(132, Short.MAX_VALUE)))
+        );
+        frameOptionsLayout.setVerticalGroup(
+            frameOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameOptionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(82, Short.MAX_VALUE))
+            .addGroup(frameOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(frameOptionsLayout.createSequentialGroup()
+                    .addGap(72, 72, 72)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(73, Short.MAX_VALUE)))
+        );
+
+        frameEditPresets.setSize(new java.awt.Dimension(334, 126));
+
+        panelOutputSpecification.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel3.setText("# specified presets");
+
+        labelNumOutputPresets.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        labelNumOutputPresets.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelNumOutputPresets.setText("0");
+        labelNumOutputPresets.setToolTipText("");
+
+        buttonRecordOutputs.setText("Add new preset from currently displayed values");
+        buttonRecordOutputs.setToolTipText("");
+        buttonRecordOutputs.setPreferredSize(new java.awt.Dimension(107, 28));
+        buttonRecordOutputs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRecordOutputsActionPerformed(evt);
+            }
+        });
+
+        buttonDeleteOutputs.setText("Delete all outputs");
+        buttonDeleteOutputs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeleteOutputsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelOutputSpecificationLayout = new javax.swing.GroupLayout(panelOutputSpecification);
+        panelOutputSpecification.setLayout(panelOutputSpecificationLayout);
+        panelOutputSpecificationLayout.setHorizontalGroup(
+            panelOutputSpecificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOutputSpecificationLayout.createSequentialGroup()
+                .addGroup(panelOutputSpecificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelOutputSpecificationLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelNumOutputPresets, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonDeleteOutputs, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .addComponent(buttonRecordOutputs, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelOutputSpecificationLayout.setVerticalGroup(
+            panelOutputSpecificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOutputSpecificationLayout.createSequentialGroup()
+                .addComponent(buttonRecordOutputs, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonDeleteOutputs, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelOutputSpecificationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(labelNumOutputPresets))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout frameEditPresetsLayout = new javax.swing.GroupLayout(frameEditPresets.getContentPane());
+        frameEditPresets.getContentPane().setLayout(frameEditPresetsLayout);
+        frameEditPresetsLayout.setHorizontalGroup(
+            frameEditPresetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameEditPresetsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelOutputSpecification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        frameEditPresetsLayout.setVerticalGroup(
+            frameEditPresetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameEditPresetsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelOutputSpecification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Data Generator");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Record Inputs"));
+
+        buttonRecordInputs.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        buttonRecordInputs.setText("Start recording");
+        buttonRecordInputs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRecordInputsActionPerformed(evt);
+            }
+        });
+
+        buttonDeleteInputs.setText("Delete recorded inputs");
+        buttonDeleteInputs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeleteInputsActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("# recorded examples:");
+
+        labelNumInputExamples.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        labelNumInputExamples.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelNumInputExamples.setText("0");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelNumInputExamples, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(buttonDeleteInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonRecordInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(buttonRecordInputs, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonDeleteInputs)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(labelNumInputExamples))
+                .addContainerGap())
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Generate training dataset"));
+
+        buttonAdd.setText("Re-generate training data & Train");
+        buttonAdd.setToolTipText("");
+        buttonAdd.setMaximumSize(new java.awt.Dimension(107, 28));
+        buttonAdd.setMinimumSize(new java.awt.Dimension(107, 28));
+        buttonAdd.setPreferredSize(new java.awt.Dimension(107, 28));
+        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddActionPerformed(evt);
             }
         });
 
@@ -532,20 +597,17 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             }
         });
 
-        buttonDeleteTrainingInstances.setText("Delete training");
-        buttonDeleteTrainingInstances.addActionListener(new java.awt.event.ActionListener() {
+        buttonLoadPreviousModel.setText("<html>Load<br>previous model<html>");
+        buttonLoadPreviousModel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonDeleteTrainingInstancesActionPerformed(evt);
+                buttonLoadPreviousModelActionPerformed(evt);
             }
         });
 
-        jLabel4.setText("# examples:");
-
-        buttonSaveData.setText("Save data...");
-        buttonSaveData.setToolTipText("");
-        buttonSaveData.addActionListener(new java.awt.event.ActionListener() {
+        buttonLoadNextModel.setText("<html>Load<br>next model<html>");
+        buttonLoadNextModel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonSaveDataActionPerformed(evt);
+                buttonLoadNextModelActionPerformed(evt);
             }
         });
 
@@ -553,37 +615,32 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(fieldNumInstances, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(buttonRun, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonTrain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonDeleteTrainingInstances, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonSaveData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jSeparator1)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(buttonLoadPreviousModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonLoadNextModel, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fieldNumInstances)
-                    .addComponent(jLabel4)
-                    .addComponent(buttonDeleteTrainingInstances))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonTrain, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonSaveData))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonRun, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonLoadPreviousModel)
+                    .addComponent(buttonLoadNextModel))
+                .addContainerGap())
         );
 
         jLabel1.setText("Status:");
@@ -593,14 +650,165 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(labelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(9, 9, 9)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose inputs for generating examples"));
+
+        buttonGroupInputMode.add(radioButtonInputsRandom);
+        radioButtonInputsRandom.setSelected(true);
+        radioButtonInputsRandom.setText("Choose randomly from recorded inputs");
+        radioButtonInputsRandom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioButtonInputsRandomActionPerformed(evt);
+            }
+        });
+
+        buttonGroupInputMode.add(radioButtonInputsCluster);
+        radioButtonInputsCluster.setText("Cluster recorded inputs and choose cluster centers");
+        radioButtonInputsCluster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioButtonInputsClusterActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("use");
+
+        jLabel6.setText("choose");
+
+        fieldNumRandomInstances.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        fieldNumRandomInstances.setText("3");
+        fieldNumRandomInstances.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldNumRandomInstancesActionPerformed(evt);
+            }
+        });
+        fieldNumRandomInstances.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldNumRandomInstancesKeyTyped(evt);
+            }
+        });
+
+        fieldNumClusterInstances.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        fieldNumClusterInstances.setText("3");
+        fieldNumClusterInstances.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldNumClusterInstancesActionPerformed(evt);
+            }
+        });
+        fieldNumClusterInstances.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldNumClusterInstancesKeyTyped(evt);
+            }
+        });
+
+        jLabel7.setText("examples");
+
+        jLabel8.setText("clusters");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioButtonInputsCluster)
+                    .addComponent(radioButtonInputsRandom))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(fieldNumRandomInstances, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(fieldNumClusterInstances))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioButtonInputsRandom)
+                    .addComponent(jLabel6)
+                    .addComponent(fieldNumRandomInstances, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioButtonInputsCluster)
+                    .addComponent(jLabel5)
+                    .addComponent(fieldNumClusterInstances, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose outputs for generating examples"));
+
+        buttonGroupOutputMode.add(radioButtonOutputsRandom);
+        radioButtonOutputsRandom.setSelected(true);
+        radioButtonOutputsRandom.setText("Generate random outputs within legal range");
+        radioButtonOutputsRandom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioButtonOutputsRandomActionPerformed(evt);
+            }
+        });
+
+        buttonGroupOutputMode.add(radioButtonOutputsPresets);
+        radioButtonOutputsPresets.setText("Use output value presets");
+        radioButtonOutputsPresets.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioButtonOutputsPresetsActionPerformed(evt);
+            }
+        });
+
+        buttonEditPresets.setText("Edit...");
+        buttonEditPresets.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEditPresetsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(radioButtonOutputsRandom)
+                        .addContainerGap(232, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(radioButtonOutputsPresets)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonEditPresets)
+                        .addGap(71, 71, 71))))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(radioButtonOutputsRandom)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioButtonOutputsPresets)
+                    .addComponent(buttonEditPresets))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -609,25 +817,32 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -650,6 +865,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             setupMinMax();
             updateNumInputExamples(g.getNumInputInstances());
             buttonDeleteInputs.setEnabled(true);
+            buttonRecordInputs.setEnabled(false);
             buttonAdd.setEnabled(true);
                 
 //            // Older version:
@@ -672,10 +888,14 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
 
     private void radioButtonOutputsRandomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonOutputsRandomActionPerformed
         g.setOutputMode(OutputGenerator.OutputMode.RANDOM);
-        buttonRecordOutputs.setEnabled(false);
-        buttonDeleteOutputs.setEnabled(false);
+        buttonEditPresets.setEnabled(false);
+        //buttonRecordOutputs.setEnabled(false);
+        //buttonDeleteOutputs.setEnabled(false);
+        //panelOutputSpecification.setVisible(false);
         g.deleteStoredOutputs(); // TODO: maybe "smooth" this operation?
-        labelNumOutputExamples.setText("0");
+        updateNumOutputExamples();
+        labelStatus.setText("Now generating random outputs.");
+        //labelNumOutputExamples.setText("0");
         //fieldNumSamples.setEnabled(false);
     }//GEN-LAST:event_radioButtonOutputsRandomActionPerformed
 
@@ -685,16 +905,24 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         //labelNumExamples1.setText("0");
         buttonAdd.setEnabled(false);
         buttonDeleteInputs.setEnabled(false);
+        buttonRecordInputs.setEnabled(true);
+        labelStatus.setText("Click on \"Start Recording\" to record inputs.");
     }//GEN-LAST:event_buttonDeleteInputsActionPerformed
 
     private void radioButtonInputsRandomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonInputsRandomActionPerformed
         comboClustering.setEnabled(false);
-        fieldNumInstances.setEnabled(true);
+        fieldNumRandomInstances.setEnabled(true);
+        fieldNumClusterInstances.setEnabled(false);
+        fieldNumInstances = fieldNumRandomInstances;
         g.setInputMode(InputGenerator.InputMode.RANDOM);
+        labelStatus.setText("Now randomly choosing " + fieldNumRandomInstances.getText().trim() + " examples from recorded inputs.");
     }//GEN-LAST:event_radioButtonInputsRandomActionPerformed
 
     private void radioButtonInputsClusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonInputsClusterActionPerformed
         comboClustering.setEnabled(true);
+        fieldNumRandomInstances.setEnabled(false);
+        fieldNumClusterInstances.setEnabled(true);
+        fieldNumInstances = fieldNumClusterInstances;
         if ( comboClustering.getSelectedIndex() == 0 ) {
             g.setInputMode(InputGenerator.InputMode.CLUSTERkm);
             fieldNumInstances.setEnabled(true);
@@ -702,12 +930,14 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             g.setInputMode(InputGenerator.InputMode.CLUSTERem);
             fieldNumInstances.setEnabled(false);
         }
+        labelStatus.setText("Now choosing " + fieldNumClusterInstances.getText().trim() + " cluster centers from recorded inputs.");
     }//GEN-LAST:event_radioButtonInputsClusterActionPerformed
 
     private void buttonRecordOutputsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRecordOutputsActionPerformed
         g.getOutputCurrentValues();
         updateNumOutputExamples();
         buttonDeleteOutputs.setEnabled(true);
+        labelStatus.setText("Output preset added. You can click again to add another preset.");
 //        RecordingState state;
 //        state = w.getSupervisedLearningManager().getRecordingState();
 //        logger.log(Level.SEVERE, "State: {0}", state.toString());
@@ -733,50 +963,38 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
 
     private void buttonDeleteOutputsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteOutputsActionPerformed
         g.deleteStoredOutputs();
-        labelNumOutputExamples.setText(Integer.toString(0));
+        labelNumOutputPresets.setText(Integer.toString(0));
         buttonDeleteOutputs.setEnabled(false);
+        labelStatus.setText("No output presets. Click on \"Add new preset from currently displayed values\" to add an output preset.");
     }//GEN-LAST:event_buttonDeleteOutputsActionPerformed
 
     private void radioButtonOutputsPresetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonOutputsPresetsActionPerformed
         g.setOutputMode(OutputGenerator.OutputMode.PRESET);
-        buttonRecordOutputs.setEnabled(true);
+        buttonEditPresets.setEnabled(true);
+        
+        g.deleteStoredOutputs(); // TODO: maybe "smooth" this operation?
+        updateNumOutputExamples();
+        labelStatus.setText("No output presets. Click on \"Edit...\" to add output presets.");
+        //buttonRecordOutputs.setEnabled(true);
+        //panelOutputSpecification.setVisible(true);
         //fieldNumSamples.setEnabled(true);
     }//GEN-LAST:event_radioButtonOutputsPresetsActionPerformed
-
-    private void buttonDeleteTrainingInstancesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteTrainingInstancesActionPerformed
-        w.getDataManager().deleteAll();
-        buttonDeleteTrainingInstances.setEnabled(false);
-        buttonTrain.setEnabled(false);
-        buttonRun.setEnabled(false);
-        buttonSaveData.setEnabled(false);
-    }//GEN-LAST:event_buttonDeleteTrainingInstancesActionPerformed
 
     private void buttonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRunActionPerformed
         if (w.getSupervisedLearningManager().getRunningState() == SupervisedLearningManager.RunningState.NOT_RUNNING) {
             w.getSupervisedLearningManager().getSupervisedLearningController().startRun();
             buttonRun.setText("Stop running");
             buttonRun.setForeground(Color.RED);
+            labelStatus.setText("Models running!");
             //  w.getSupervisedLearningManager().setRunningState(SupervisedLearningManager.RunningState.RUNNING);
         } else {
             w.getSupervisedLearningManager().getSupervisedLearningController().stopRun();
             buttonRun.setText("Run");
             buttonRun.setForeground(Color.BLACK);
+            labelStatus.setText("Models stopped. You can either regenerate a new dataset, record new inputs, or edit parameters for dataset generation.");
             //w.getSupervisedLearningManager().setRunningState(SupervisedLearningManager.RunningState.NOT_RUNNING);
         }
     }//GEN-LAST:event_buttonRunActionPerformed
-
-    private void buttonTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTrainActionPerformed
-        if (w.getSupervisedLearningManager().getLearningState() == SupervisedLearningManager.LearningState.TRAINING) {
-            w.getSupervisedLearningManager().getSupervisedLearningController().cancelTrain();
-            //w.getSupervisedLearningManager().cancelTraining();
-        } else {
-            w.getSupervisedLearningManager().getSupervisedLearningController().train();
-            KadenzeLogging.getLogger().logGeneratorEvent(w, g);
-            buttonRun.setEnabled(true);
-            buttonSaveData.setEnabled(true);
-            //w.getSupervisedLearningManager().buildAll();
-        }
-    }//GEN-LAST:event_buttonTrainActionPerformed
 
     private void fieldNumInstancesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNumInstancesKeyTyped
         char enter = evt.getKeyChar();
@@ -790,38 +1008,36 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
     }//GEN-LAST:event_fieldNumInstancesActionPerformed
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
-        //rg.setAsTrainingData(sliderModelValue.getValue());
-
-        //g.setAsTrainingData(sliderModelValue.getValue());
-
-        int numInstances = Integer.parseInt(fieldNumInstances.getText());
-        g.setAsTrainingData(numInstances);
-        buttonDeleteTrainingInstances.setEnabled(true);
-        buttonTrain.setEnabled(true);
-        buttonSaveData.setEnabled(true);
-    }//GEN-LAST:event_buttonAddActionPerformed
-
-    private void buttonSaveDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveDataActionPerformed
-        if (w.getDataManager() != null) {
-
-            File file = Util.findSaveFile("arff",
-                    "data",
-                    "arff file",
-                    this);
-            if (file != null) {
-                try {
-                    w.getDataManager().writeInstancesToArff(file);
-                    /* if (WekinatorRunner.isLogging()) {
-                     Plog.log(Msg.DATA_VIEWER_SAVE_ARFF_BUTTON, file.getAbsolutePath() + "/" + file.getName());
-                     } */
-                    // Util.setLastFile(SimpleDataset.getFileExtension(), file);
-                } catch (Exception ex) {
-                    Logger.getLogger(DatasetViewer.class.getName()).log(Level.WARNING, null, ex);
-                    Util.showPrettyErrorPane(this, "Could not save to file: " + ex.getMessage());
+        if (fieldNumInstances.getText().trim().equals("0") || fieldNumInstances.getText().isEmpty()) {
+            Util.showPrettyErrorPane(this, "Choose inputs for generating examples: Please type the number of input examples/clusters you want to use.");
+            labelStatus.setText("Please type the number of input examples/clusters you want to use.");
+        } else {
+            if (g.getOutputMode() == OutputGenerator.OutputMode.PRESET) {
+                if (labelNumOutputPresets.getText().trim().equals("0")) {
+                    Util.showPrettyErrorPane(this, "Use output value presets: Please add at least one output preset by clicking on 'Edit...' button.");
+                    labelStatus.setText("Please add at least one output preset by clicking on \"Edit...\" button.");
+                    return;
                 }
             }
+            
+            
+            int numInstances = Integer.parseInt(fieldNumInstances.getText());
+            g.setAsTrainingData(numInstances);
+            //buttonDeleteTrainingInstances.setEnabled(true);
+            //buttonTrain.setEnabled(true);
+            
+            if (w.getSupervisedLearningManager().getLearningState() == SupervisedLearningManager.LearningState.TRAINING) {
+                w.getSupervisedLearningManager().getSupervisedLearningController().cancelTrain();
+                //w.getSupervisedLearningManager().cancelTraining();
+            } else {
+                w.getSupervisedLearningManager().getSupervisedLearningController().train();
+                KadenzeLogging.getLogger().logGeneratorEvent(w, g);
+                buttonRun.setEnabled(true);
+                labelStatus.setText("Dataset generated / Training completed. Press \"Run\" to run trained models.");
+                //w.getSupervisedLearningManager().buildAll();
+            }
         }
-    }//GEN-LAST:event_buttonSaveDataActionPerformed
+    }//GEN-LAST:event_buttonAddActionPerformed
 
     private void comboClusteringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboClusteringActionPerformed
         // TODO add your handling code here:
@@ -836,6 +1052,50 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             fieldNumInstances.setEnabled(false);
         }
     }//GEN-LAST:event_comboClusteringItemStateChanged
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        frameOptions.setVisible(true);
+        frameOptions.toFront();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void fieldNumRandomInstancesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNumRandomInstancesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldNumRandomInstancesActionPerformed
+
+    private void fieldNumRandomInstancesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNumRandomInstancesKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+        labelStatus.setText("Now randomly choosing " + fieldNumRandomInstances.getText().trim() + " examples from recorded inputs.");
+        fieldNumInstances = fieldNumRandomInstances;
+    }//GEN-LAST:event_fieldNumRandomInstancesKeyTyped
+
+    private void fieldNumClusterInstancesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNumClusterInstancesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldNumClusterInstancesActionPerformed
+
+    private void fieldNumClusterInstancesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNumClusterInstancesKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+        labelStatus.setText("Now choosing " + fieldNumClusterInstances.getText().trim() + " cluster centers from recorded inputs.");
+        fieldNumInstances = fieldNumClusterInstances;
+    }//GEN-LAST:event_fieldNumClusterInstancesKeyTyped
+
+    private void buttonEditPresetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditPresetsActionPerformed
+        frameEditPresets.setVisible(true);
+        frameEditPresets.toFront();
+    }//GEN-LAST:event_buttonEditPresetsActionPerformed
+
+    private void buttonLoadPreviousModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoadPreviousModelActionPerformed
+        g.swapTrainingForDummy();
+    }//GEN-LAST:event_buttonLoadPreviousModelActionPerformed
+
+    private void buttonLoadNextModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoadNextModelActionPerformed
+        g.swapTrainingForDummy();
+    }//GEN-LAST:event_buttonLoadNextModelActionPerformed
 
     private void userUpdatedSlider() {
         //setSliderValueScaled(getSliderValueScaled());
@@ -881,27 +1141,43 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
     private javax.swing.JButton buttonAdd;
     private javax.swing.JButton buttonDeleteInputs;
     private javax.swing.JButton buttonDeleteOutputs;
-    private javax.swing.JButton buttonDeleteTrainingInstances;
+    private javax.swing.JButton buttonEditPresets;
     private javax.swing.ButtonGroup buttonGroupInputMode;
     private javax.swing.ButtonGroup buttonGroupOutputMode;
+    private javax.swing.JButton buttonLoadNextModel;
+    private javax.swing.JButton buttonLoadPreviousModel;
     private javax.swing.JButton buttonRecordInputs;
     private javax.swing.JButton buttonRecordOutputs;
     private javax.swing.JButton buttonRun;
-    private javax.swing.JButton buttonSaveData;
-    private javax.swing.JButton buttonTrain;
     private javax.swing.JComboBox<String> comboClustering;
+    private javax.swing.JTextField fieldNumClusterInstances;
     private javax.swing.JTextField fieldNumInstances;
+    private javax.swing.JTextField fieldNumRandomInstances;
+    private javax.swing.JFrame frameEditPresets;
+    private javax.swing.JFrame frameOptions;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel labelNumInputExamples;
-    private javax.swing.JLabel labelNumOutputExamples;
+    private javax.swing.JLabel labelNumOutputPresets;
     private javax.swing.JLabel labelStatus;
+    private javax.swing.JMenu menuOptions;
+    private javax.swing.JPanel panelOutputSpecification;
     private javax.swing.JRadioButton radioButtonInputsCluster;
     private javax.swing.JRadioButton radioButtonInputsRandom;
     private javax.swing.JRadioButton radioButtonOutputsPresets;
