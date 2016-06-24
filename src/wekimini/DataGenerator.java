@@ -44,6 +44,15 @@ public class DataGenerator implements GeneratesTrainingData {
     private final int numOutputs;
     private static final int numMetaData = 3;
     
+    public InputMode trainingInputMode;
+    public OutputMode trainingOutputMode;
+    public InputMode dummyInputMode;
+    public OutputMode dummyOutputMode;
+    public InputMode tempInputMode;
+    public OutputMode tempOutputMode;
+    
+    public int numTrainingInstances;
+    
     private String[] outputNames;
     
     private static final SimpleDateFormat prettyDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
@@ -77,8 +86,8 @@ public class DataGenerator implements GeneratesTrainingData {
         for ( int j = 1; j < this.outputNames.length; j++ ) {
             this.trainingInputs.insertAttributeAt(new Attribute(this.outputNames[j]), this.trainingInputs.numAttributes());
             this.trainingOutputs.insertAttributeAt(new Attribute(this.outputNames[j]), this.trainingOutputs.numAttributes());
-            this.dummyInstances.insertAttributeAt(new Attribute(this.outputNames[j]), this.trainingOutputs.numAttributes());
-            this.tempInstances.insertAttributeAt(new Attribute(this.outputNames[j]), this.trainingOutputs.numAttributes());
+            this.dummyInstances.insertAttributeAt(new Attribute(this.outputNames[j]), this.dummyInstances.numAttributes());
+            this.tempInstances.insertAttributeAt(new Attribute(this.outputNames[j]), this.tempInstances.numAttributes());
         }
     }
     
@@ -184,6 +193,12 @@ public class DataGenerator implements GeneratesTrainingData {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    private void updateTrainingInfo() {
+        trainingInputMode = i.getInputMode();
+        trainingOutputMode = o.getOutputMode();
+        numTrainingInstances = w.getDataManager().getNumExamples();
+    }
+    
     public void addTrainingToDummy(int numTrainingInstances) {
         for ( int n = 0 ; n < numTrainingInstances ; n++ ) {
             double[] inputs = getTrainingInputValues(n);
@@ -197,6 +212,8 @@ public class DataGenerator implements GeneratesTrainingData {
             }
             addToDummyInstances(inputs, outputs, mask, dummyRecordingRound);
         }
+        dummyInputMode = trainingInputMode;
+        dummyOutputMode = trainingOutputMode;
     }
     
     public void addDummyToTemp(int numDummyInstances) {
@@ -212,6 +229,9 @@ public class DataGenerator implements GeneratesTrainingData {
             }
             addToTempInstances(inputs, outputs, mask, dummyRecordingRound);
         }
+        
+        tempInputMode = dummyInputMode;
+        tempOutputMode = dummyOutputMode;
     }
     
     public void addTempToTraining(int numTempInstances) {
@@ -227,6 +247,11 @@ public class DataGenerator implements GeneratesTrainingData {
             }
             w.getDataManager().addToTraining(inputs, outputs, mask, dummyRecordingRound);
         }
+        
+        trainingInputMode = tempInputMode;
+        i.setInputMode(trainingInputMode);
+        trainingOutputMode = tempOutputMode;
+        o.setOutputMode(trainingOutputMode);
     }
     
     public void swapTrainingForDummy() {
@@ -422,8 +447,26 @@ public class DataGenerator implements GeneratesTrainingData {
         return outputs;
     }
     
+    public boolean isDummyEmpty() {
+        int numDummyInstances = dummyInstances.numInstances();
+        if (numDummyInstances != 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
     @Override
     public void setAsTrainingData(int numInstances) {
+        int numTrainingInstances = w.getDataManager().getNumExamples();
+        if (numTrainingInstances != 0) {
+            dummyInstances.delete();
+            addTrainingToDummy(numTrainingInstances);
+        }        
+        w.getDataManager().deleteAll();
+        
+        updateTrainingInfo();
+        
         setTrainingInputs(numInstances);
         if ( i.getInputMode() == InputMode.CLUSTERem ) {
             numInstances = i.getNumClusters();
@@ -442,13 +485,6 @@ public class DataGenerator implements GeneratesTrainingData {
         logger.log(Level.SEVERE, "Output number instances:{0}", outputString);
         
         dummyRecordingRound++;
-        
-        int numTrainingInstances = w.getDataManager().getNumExamples();
-        if (numTrainingInstances != 0) {
-            dummyInstances.delete();
-            addTrainingToDummy(numTrainingInstances);
-        }        
-        w.getDataManager().deleteAll();
         
         for ( int j = 0 ; j < numInstances ; j++ ) {
             logger.log(Level.SEVERE, "Into the loop...");

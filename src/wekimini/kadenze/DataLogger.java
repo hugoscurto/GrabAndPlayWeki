@@ -720,12 +720,34 @@ public class DataLogger implements KadenzeLogger {
         sb.append(",NEW_FEATURES=").append(booleanArrayToBracketedStringList(currentInputSelection));
         pw.println(sb.toString());
     }
+    
+    @Override
+    public void logGeneratorRecordInputs(Wekinator w, DataGenerator g) {
+        String numStoredInputs = Integer.toString(g.getNumInputInstances());
+        pw.println(ts() + "," + w.getID() + ",DD_NUM_RECORDED_INPUTS," + numStoredInputs);
+    }
+    
+    @Override
+    public void logGeneratorPresetOutputs(Wekinator w, DataGenerator g) {
+        String numOutputPresets = Integer.toString(g.getNumOutputInstances());
+        pw.println(ts() + "," + w.getID() + ",NUM_OUTPUT_PRESETS," + numOutputPresets);
+    }
+    
+    @Override
+    public void logGeneratorPreviousModel(Wekinator w) {
+        pw.println(ts() + "," + w.getID() + ",PREVIOUS_MODEL_LOADED");
+    }
+    
+    @Override
+    public void logGeneratorNextModel(Wekinator w) {
+        pw.println(ts() + "," + w.getID() + ",NEXT_MODEL_LOADED");
+    }
 
     @Override
-    public void logGeneratorEvent(Wekinator w, DataGenerator g) {
+    public void logGeneratorNewModel(Wekinator w, DataGenerator g) {
         String numExamples = Integer.toString(w.getDataManager().getNumExamples());
-        pw.println(ts() + "," + w.getID() + ",MODEL_" + modelSetID);
-        pw.println(ts() + "," + w.getID() + ",ADD_EXAMPLES," + numExamples);
+        pw.println(ts() + "," + w.getID() + ",NEW_MODEL_" + modelSetID);
+        pw.println(ts() + "," + w.getID() + ",TRAINING_DATA_NUM_EXAMPLES," + numExamples);
         pw.println(ts() + "," + w.getID() + ",DD_MODE," + g.getInputMode() + "," + g.getOutputMode());
         //pw.println(ts() + "," + w.getID() + ",STORED_INPUTS," + g.getStoredInputs().toString());
         //pw.println(ts() + "," + w.getID() + ",STORED_OUTPUTS," + g.getStoredOutputs().toString());

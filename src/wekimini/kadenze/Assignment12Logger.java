@@ -639,8 +639,29 @@ public class Assignment12Logger implements KadenzeLogger {
     @Override
     public void logDtwModelUpdated(Wekinator w, DtwModel m, DtwSettings oldSettings, DtwSettings newDtwSettings, boolean[] selectedInputs, boolean[] inputSelection) {
     }
+    
+    @Override
+    public void logGeneratorNextModel(Wekinator w) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
-    public void logGeneratorEvent(Wekinator w, DataGenerator g) {
+    public void logGeneratorPreviousModel(Wekinator w) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void logGeneratorNewModel(Wekinator w, DataGenerator g) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void logGeneratorPresetOutputs(Wekinator w, DataGenerator g) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void logGeneratorRecordInputs(Wekinator w, DataGenerator g) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

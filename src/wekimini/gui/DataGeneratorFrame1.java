@@ -12,7 +12,9 @@ import javax.swing.event.ChangeListener;
 import weka.core.Instances;
 import wekimini.DataGenerator;
 import wekimini.InputGenerator;
+import wekimini.InputGenerator.InputMode;
 import wekimini.OutputGenerator;
+import wekimini.OutputGenerator.OutputMode;
 import wekimini.Path;
 import wekimini.StatusUpdateCenter;
 import wekimini.SupervisedLearningManager;
@@ -37,6 +39,9 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
     private int maxValue = 1;
     private double sliderScale;
     private double sliderScaleInv;
+    
+    public int modelID = 0;
+    public boolean previousButtonHit = false;
     
     private static final Logger logger = Logger.getLogger(SupervisedLearningManager.class.getName());
     /**
@@ -93,6 +98,9 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         
         //panelOutputSpecification.setVisible(false);
         
+        buttonLoadPreviousModel.setEnabled(false);
+        buttonLoadNextModel.setEnabled(false);
+        
         labelStatus.setText("Click on \"Start Recording\" to record inputs.");
         
         g.setInputMode(InputGenerator.InputMode.RANDOM);
@@ -133,7 +141,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         } else {
             buttonRecordInputs.setText("Start Recording");
             buttonRecordInputs.setForeground(Color.black);
-            labelStatus.setText("Recording done. You can now generate training data, and/or choose generation parameters.");
+            labelStatus.setText("<html>Recording done. You can now generate training data, and/or choose generation parameters.</html>");
         }
     }
     private void updateRecordOutputsButton() {
@@ -597,14 +605,16 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             }
         });
 
-        buttonLoadPreviousModel.setText("<html>Load<br>previous model<html>");
+        buttonLoadPreviousModel.setText("<html>Load previous<br>model<html>");
         buttonLoadPreviousModel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonLoadPreviousModelActionPerformed(evt);
             }
         });
 
-        buttonLoadNextModel.setText("<html>Load<br>next model<html>");
+        buttonLoadNextModel.setText("<html>Load next<br>model<html>");
+        buttonLoadNextModel.setToolTipText("");
+        buttonLoadNextModel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         buttonLoadNextModel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonLoadNextModelActionPerformed(evt);
@@ -618,13 +628,13 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                     .addComponent(buttonRun, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(buttonLoadPreviousModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(buttonLoadNextModel, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
+                        .addComponent(buttonLoadPreviousModel, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonLoadNextModel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -645,23 +655,27 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
 
         jLabel1.setText("Status:");
 
+        labelStatus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelStatus.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(labelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -793,7 +807,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(radioButtonOutputsRandom)
-                        .addContainerGap(232, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(radioButtonOutputsPresets)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -817,22 +831,22 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -840,8 +854,6 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -861,6 +873,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             int whichRound = w.getDataManager().getMaxRecordingRound();
             
             g.getInputStream(whichRound);
+            KadenzeLogging.getLogger().logGeneratorRecordInputs(w,g);
             
             setupMinMax();
             updateNumInputExamples(g.getNumInputInstances());
@@ -965,7 +978,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
         g.deleteStoredOutputs();
         labelNumOutputPresets.setText(Integer.toString(0));
         buttonDeleteOutputs.setEnabled(false);
-        labelStatus.setText("No output presets. Click on \"Add new preset from currently displayed values\" to add an output preset.");
+        labelStatus.setText("<html>No output presets. Click on \"Add new preset from currently displayed values\" to add an output preset.</html>");
     }//GEN-LAST:event_buttonDeleteOutputsActionPerformed
 
     private void radioButtonOutputsPresetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonOutputsPresetsActionPerformed
@@ -991,7 +1004,7 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
             w.getSupervisedLearningManager().getSupervisedLearningController().stopRun();
             buttonRun.setText("Run");
             buttonRun.setForeground(Color.BLACK);
-            labelStatus.setText("Models stopped. You can either regenerate a new dataset, record new inputs, or edit parameters for dataset generation.");
+            labelStatus.setText("<html>Models stopped. You can either regenerate a new dataset, record new inputs, or edit generation parameters.</html>");
             //w.getSupervisedLearningManager().setRunningState(SupervisedLearningManager.RunningState.NOT_RUNNING);
         }
     }//GEN-LAST:event_buttonRunActionPerformed
@@ -1020,9 +1033,16 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
                 }
             }
             
+            modelID = modelID + 1;
+            updateLoadModelButtons();
             
             int numInstances = Integer.parseInt(fieldNumInstances.getText());
             g.setAsTrainingData(numInstances);
+            
+            buttonLoadNextModel.setEnabled(false);
+            if (!g.isDummyEmpty()) {
+                buttonLoadPreviousModel.setEnabled(true);
+            }
             //buttonDeleteTrainingInstances.setEnabled(true);
             //buttonTrain.setEnabled(true);
             
@@ -1031,7 +1051,10 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
                 //w.getSupervisedLearningManager().cancelTraining();
             } else {
                 w.getSupervisedLearningManager().getSupervisedLearningController().train();
-                KadenzeLogging.getLogger().logGeneratorEvent(w, g);
+                KadenzeLogging.getLogger().logGeneratorNewModel(w, g);
+                if (g.getOutputMode() == OutputGenerator.OutputMode.PRESET) {
+                    KadenzeLogging.getLogger().logGeneratorPresetOutputs(w, g);
+                }
                 buttonRun.setEnabled(true);
                 labelStatus.setText("Dataset generated / Training completed. Press \"Run\" to run trained models.");
                 //w.getSupervisedLearningManager().buildAll();
@@ -1090,11 +1113,73 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonEditPresetsActionPerformed
 
     private void buttonLoadPreviousModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoadPreviousModelActionPerformed
+        previousButtonHit = true;
+        
         g.swapTrainingForDummy();
+        
+        buttonLoadPreviousModel.setEnabled(false);
+        buttonLoadNextModel.setEnabled(true);
+
+        updateInputParameters();
+        updateOutputParameters();
+        
+        if (w.getSupervisedLearningManager().getLearningState() == SupervisedLearningManager.LearningState.TRAINING) {
+            w.getSupervisedLearningManager().getSupervisedLearningController().cancelTrain();
+            //w.getSupervisedLearningManager().cancelTraining();
+        } else {
+            w.getSupervisedLearningManager().getSupervisedLearningController().train();
+            KadenzeLogging.getLogger().logGeneratorPreviousModel(w);
+            buttonRun.setEnabled(true);
+            labelStatus.setText("Previous dataset loaded / Training completed. Press \"Run\" to run trained models.");
+            //w.getSupervisedLearningManager().buildAll();
+        }
     }//GEN-LAST:event_buttonLoadPreviousModelActionPerformed
 
+    private void updateInputParameters() {
+        if (g.getInputMode() == InputMode.RANDOM) {
+            //buttonGroupInputMode.setSelected(m, rootPaneCheckingEnabled);
+            radioButtonInputsRandom.setSelected(true);
+            fieldNumRandomInstances.setEnabled(true);
+            fieldNumRandomInstances.setText(Integer.toString(w.getDataManager().getNumExamples()));
+            fieldNumClusterInstances.setEnabled(false);
+        } else {
+            radioButtonInputsCluster.setSelected(true);
+            fieldNumRandomInstances.setEnabled(false);
+            fieldNumClusterInstances.setEnabled(true);
+            fieldNumClusterInstances.setText(Integer.toString(w.getDataManager().getNumExamples()));
+        }
+    }
+    
+    private void updateOutputParameters() {
+        if (g.getOutputMode() == OutputMode.RANDOM) {
+            //buttonGroupInputMode.setSelected(m, rootPaneCheckingEnabled);
+            radioButtonOutputsRandom.setSelected(true);
+        } else {
+            radioButtonOutputsPresets.setSelected(true);
+        }
+    }
+    
     private void buttonLoadNextModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoadNextModelActionPerformed
+        previousButtonHit = false;
+        
         g.swapTrainingForDummy();
+        
+        buttonLoadPreviousModel.setEnabled(true);
+        buttonLoadNextModel.setEnabled(false);
+        
+        updateInputParameters();
+        updateOutputParameters();
+        
+        if (w.getSupervisedLearningManager().getLearningState() == SupervisedLearningManager.LearningState.TRAINING) {
+            w.getSupervisedLearningManager().getSupervisedLearningController().cancelTrain();
+            //w.getSupervisedLearningManager().cancelTraining();
+        } else {
+            w.getSupervisedLearningManager().getSupervisedLearningController().train();
+            KadenzeLogging.getLogger().logGeneratorNextModel(w);
+            buttonRun.setEnabled(true);
+            labelStatus.setText("Next dataset loaded / Training completed. Press \"Run\" to run trained models.");
+            //w.getSupervisedLearningManager().buildAll();
+        }
     }//GEN-LAST:event_buttonLoadNextModelActionPerformed
 
     private void userUpdatedSlider() {
@@ -1183,4 +1268,14 @@ public class DataGeneratorFrame1 extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioButtonOutputsPresets;
     private javax.swing.JRadioButton radioButtonOutputsRandom;
     // End of variables declaration//GEN-END:variables
+
+    private void updateLoadModelButtons() {
+        if (previousButtonHit) {
+            buttonLoadPreviousModel.setText("<html>Load previous<br>model (#<html>" + Integer.toString(modelID-2) + ")");
+            buttonLoadNextModel.setText("<html>Load next<br>model (#<html>" + Integer.toString(modelID) + ")");
+        } else {
+            buttonLoadPreviousModel.setText("<html>Load previous<br>model (#<html>" + Integer.toString(modelID-1) + ")");
+            buttonLoadNextModel.setText("<html>Load next<br>model (#<html>" + Integer.toString(modelID) + ")");
+        }
+    }
 }

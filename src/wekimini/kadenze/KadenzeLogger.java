@@ -81,7 +81,15 @@ public interface KadenzeLogger {
 
     void logEvent(Wekinator w, KEvent ke);
     
-    void logGeneratorEvent(Wekinator w, DataGenerator g);
+    void logGeneratorNewModel(Wekinator w, DataGenerator g);
+    
+    void logGeneratorNextModel(Wekinator w);
+    
+    void logGeneratorPresetOutputs(Wekinator w, DataGenerator g);
+    
+    void logGeneratorPreviousModel(Wekinator w);
+    
+    void logGeneratorRecordInputs(Wekinator w, DataGenerator g);
 
     void logVersionNumberAndDate();
 
